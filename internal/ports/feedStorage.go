@@ -2,7 +2,7 @@ package ports
 
 import (
 	"context"
-	"newsfeed/graph/model"
+	"newsfeed/internal/domain/model"
 )
 
 type FeedStorage interface {

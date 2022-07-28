@@ -1,13 +1,12 @@
-package graph
+package graphql
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
 
 import (
 	"context"
-	"fmt"
-	"newsfeed/graph/generated"
-	"newsfeed/graph/model"
+	"newsfeed/internal/domain/model"
+	"newsfeed/pkg/graph/generated"
 )
 
 // AddPost is the resolver for the addPost field.
@@ -30,25 +29,11 @@ func (r *queryResolver) Feed(ctx context.Context, limit *int, offset *int) ([]*m
 	return posts, nil
 }
 
-// ID is the resolver for the id field.
-func (r *userResolver) ID(ctx context.Context, obj *model.Post) (string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-// Name is the resolver for the name field.
-func (r *userResolver) Name(ctx context.Context, obj *model.Post) (*string, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-// User returns generated.UserResolver implementation.
-func (r *Resolver) User() generated.UserResolver { return &userResolver{r} }
-
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-type userResolver struct{ *Resolver }

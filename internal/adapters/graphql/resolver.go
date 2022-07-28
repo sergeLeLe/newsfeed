@@ -1,17 +1,17 @@
-package graph
+package graphql
+
+// This file will not be regenerated automatically.
+//
+// It serves as dependency injection for your app, add any dependencies you require here.
 
 import (
 	"context"
 	"errors"
 	"github.com/99designs/gqlgen/graphql"
-	"newsfeed/graph/generated"
-	"newsfeed/graph/model"
 	"newsfeed/internal/adapters/repository"
+	"newsfeed/internal/domain/model"
+	"newsfeed/pkg/graph/generated"
 )
-
-// This file will not be regenerated automatically.
-//
-// It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct{
 	repo *repository.Repo
@@ -24,7 +24,6 @@ func NewRootResolvers(repo *repository.Repo) generated.Config {
 		},
 	}
 
-	//// Schema Directive
 	c.Directives.OneOf = func(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
 		input := obj.(map[string]interface{})
 

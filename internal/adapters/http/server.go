@@ -4,9 +4,9 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/go-chi/chi"
-	"newsfeed/graph"
-	"newsfeed/graph/generated"
+	"newsfeed/internal/adapters/graphql"
 	"newsfeed/internal/adapters/repository"
+	"newsfeed/pkg/graph/generated"
 )
 
 type Handler struct {
@@ -18,7 +18,7 @@ func NewHandler(repo *repository.Repo) *Handler {
 }
 
 func (h *Handler) GetHandler() *chi.Mux {
-	rootHandler:= handler.NewDefaultServer(generated.NewExecutableSchema(graph.NewRootResolvers(h.repo)))
+	rootHandler:= handler.NewDefaultServer(generated.NewExecutableSchema(graphql.NewRootResolvers(h.repo)))
 
 	r := chi.NewRouter()
 

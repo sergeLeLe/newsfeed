@@ -4,7 +4,7 @@ schema:
 
 # Where should the generated server code go?
 exec:
-  filename: graph/generated/generated.go
+  filename: pkg/graph/generated/generated.go
   package: generated
 
 # Uncomment to enable federation
@@ -14,14 +14,14 @@ exec:
 
 # Where should any generated models go?
 model:
-  filename: graph/model/models_gen.go
+  filename: internal/domain/model/models_gen.go
   package: model
 
 # Where should the resolver implementations go?
 resolver:
   layout: follow-schema
-  dir: graph
-  package: graph
+  dir: internal/adapters/graphql
+  package: graphql
 
 # Optional: turn on use ` + "`" + `gqlgen:"fieldName"` + "`" + ` tags in your models
 # struct_tag: json
@@ -51,15 +51,15 @@ autobind:
 # your liking
 models:
   Post:
-    model: newsfeed/graph/model.Post
+    model: newsfeed/internal/domain/model.Post
   User:
-    model: newsfeed/graph/model.Post
+    model: newsfeed/internal/domain/model.User
   VideoPost:
-    model: newsfeed/graph/model.VideoPost
+    model: newsfeed/internal/domain/model.VideoPost
   TextPost:
-    model: newsfeed/graph/model.TextPost
+    model: newsfeed/internal/domain/model.TextPost
   ImagePost:
-    model: newsfeed/graph/model.ImagePost
+    model: newsfeed/internal/domain/model.ImagePost
   ID:
     model:
       - github.com/99designs/gqlgen/graphql.ID

@@ -7,7 +7,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"newsfeed/graph/model"
+	"newsfeed/internal/domain/model"
 	"strconv"
 	"sync"
 	"sync/atomic"
@@ -38,7 +38,6 @@ type Config struct {
 type ResolverRoot interface {
 	Mutation() MutationResolver
 	Query() QueryResolver
-	User() UserResolver
 }
 
 type DirectiveRoot struct {
@@ -85,10 +84,6 @@ type MutationResolver interface {
 }
 type QueryResolver interface {
 	Feed(ctx context.Context, limit *int, offset *int) ([]*model.Post, error)
-}
-type UserResolver interface {
-	ID(ctx context.Context, obj *model.Post) (string, error)
-	Name(ctx context.Context, obj *model.Post) (*string, error)
 }
 
 type executableSchema struct {
@@ -265,7 +260,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../../api/graphql/schema.graphql", Input: `schema {
+	{Name: "../../../api/graphql/schema.graphql", Input: `schema {
     query: Query
     mutation: Mutation
 }
@@ -345,7 +340,7 @@ func (ec *executionContext) field_Mutation_addPost_args(ctx context.Context, raw
 	if tmp, ok := rawArgs["type"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("type"))
 		directive0 := func(ctx context.Context) (interface{}, error) {
-			return ec.unmarshalNPostType2newsfeedᚋgraphᚋmodelᚐPostType(ctx, tmp)
+			return ec.unmarshalNPostType2newsfeedᚋinternalᚋdomainᚋmodelᚐPostType(ctx, tmp)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			if ec.directives.ValidatePostType == nil {
@@ -361,7 +356,7 @@ func (ec *executionContext) field_Mutation_addPost_args(ctx context.Context, raw
 		if data, ok := tmp.(model.PostType); ok {
 			arg0 = data
 		} else {
-			return nil, graphql.ErrorOnPath(ctx, fmt.Errorf(`unexpected type %T from directive, should be newsfeed/graph/model.PostType`, tmp))
+			return nil, graphql.ErrorOnPath(ctx, fmt.Errorf(`unexpected type %T from directive, should be newsfeed/internal/domain/model.PostType`, tmp))
 		}
 	}
 	args["type"] = arg0
@@ -378,7 +373,7 @@ func (ec *executionContext) field_Mutation_addPost_args(ctx context.Context, raw
 	if tmp, ok := rawArgs["attach"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("attach"))
 		directive0 := func(ctx context.Context) (interface{}, error) {
-			return ec.unmarshalOPostInput2ᚖnewsfeedᚋgraphᚋmodelᚐPostInput(ctx, tmp)
+			return ec.unmarshalOPostInput2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐPostInput(ctx, tmp)
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
 			if ec.directives.ValidatePostType == nil {
@@ -396,7 +391,7 @@ func (ec *executionContext) field_Mutation_addPost_args(ctx context.Context, raw
 		} else if tmp == nil {
 			arg2 = nil
 		} else {
-			return nil, graphql.ErrorOnPath(ctx, fmt.Errorf(`unexpected type %T from directive, should be *newsfeed/graph/model.PostInput`, tmp))
+			return nil, graphql.ErrorOnPath(ctx, fmt.Errorf(`unexpected type %T from directive, should be *newsfeed/internal/domain/model.PostInput`, tmp))
 		}
 	}
 	args["attach"] = arg2
@@ -549,7 +544,7 @@ func (ec *executionContext) _Mutation_addPost(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.Post)
 	fc.Result = res
-	return ec.marshalNPost2ᚖnewsfeedᚋgraphᚋmodelᚐPost(ctx, field.Selections, res)
+	return ec.marshalNPost2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐPost(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_addPost(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -658,7 +653,7 @@ func (ec *executionContext) _Post_type(ctx context.Context, field graphql.Collec
 	}
 	res := resTmp.(model.PostType)
 	fc.Result = res
-	return ec.marshalNPostType2newsfeedᚋgraphᚋmodelᚐPostType(ctx, field.Selections, res)
+	return ec.marshalNPostType2newsfeedᚋinternalᚋdomainᚋmodelᚐPostType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Post_type(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -740,7 +735,7 @@ func (ec *executionContext) _Post_attach(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(model.Attachment)
 	fc.Result = res
-	return ec.marshalOAttachment2newsfeedᚋgraphᚋmodelᚐAttachment(ctx, field.Selections, res)
+	return ec.marshalOAttachment2newsfeedᚋinternalᚋdomainᚋmodelᚐAttachment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Post_attach(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -784,7 +779,7 @@ func (ec *executionContext) _Query_feed(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.([]*model.Post)
 	fc.Result = res
-	return ec.marshalNPost2ᚕᚖnewsfeedᚋgraphᚋmodelᚐPost(ctx, field.Selections, res)
+	return ec.marshalNPost2ᚕᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐPost(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_feed(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -991,7 +986,7 @@ func (ec *executionContext) fieldContext_TextPost_text(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.Post) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_User_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1005,7 +1000,7 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.User().ID(rctx, obj)
+		return obj.ID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1026,8 +1021,8 @@ func (ec *executionContext) fieldContext_User_id(ctx context.Context, field grap
 	fc = &graphql.FieldContext{
 		Object:     "User",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type ID does not have child fields")
 		},
@@ -1035,7 +1030,7 @@ func (ec *executionContext) fieldContext_User_id(ctx context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _User_name(ctx context.Context, field graphql.CollectedField, obj *model.Post) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_name(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_User_name(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -1049,7 +1044,7 @@ func (ec *executionContext) _User_name(ctx context.Context, field graphql.Collec
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.User().Name(rctx, obj)
+		return obj.Name, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1067,8 +1062,8 @@ func (ec *executionContext) fieldContext_User_name(ctx context.Context, field gr
 	fc = &graphql.FieldContext{
 		Object:     "User",
 		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
+		IsMethod:   false,
+		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type String does not have child fields")
 		},
@@ -2993,7 +2988,7 @@ func (ec *executionContext) unmarshalInputPostInput(ctx context.Context, obj int
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("textPost"))
 			directive0 := func(ctx context.Context) (interface{}, error) {
-				return ec.unmarshalOInputTextPost2ᚖnewsfeedᚋgraphᚋmodelᚐInputTextPost(ctx, v)
+				return ec.unmarshalOInputTextPost2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐInputTextPost(ctx, v)
 			}
 			directive1 := func(ctx context.Context) (interface{}, error) {
 				if ec.directives.OneOf == nil {
@@ -3011,7 +3006,7 @@ func (ec *executionContext) unmarshalInputPostInput(ctx context.Context, obj int
 			} else if tmp == nil {
 				it.TextPost = nil
 			} else {
-				err := fmt.Errorf(`unexpected type %T from directive, should be *newsfeed/graph/model.InputTextPost`, tmp)
+				err := fmt.Errorf(`unexpected type %T from directive, should be *newsfeed/internal/domain/model.InputTextPost`, tmp)
 				return it, graphql.ErrorOnPath(ctx, err)
 			}
 		case "imagePost":
@@ -3019,7 +3014,7 @@ func (ec *executionContext) unmarshalInputPostInput(ctx context.Context, obj int
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("imagePost"))
 			directive0 := func(ctx context.Context) (interface{}, error) {
-				return ec.unmarshalOInputImagePost2ᚖnewsfeedᚋgraphᚋmodelᚐInputImagePost(ctx, v)
+				return ec.unmarshalOInputImagePost2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐInputImagePost(ctx, v)
 			}
 			directive1 := func(ctx context.Context) (interface{}, error) {
 				if ec.directives.OneOf == nil {
@@ -3037,7 +3032,7 @@ func (ec *executionContext) unmarshalInputPostInput(ctx context.Context, obj int
 			} else if tmp == nil {
 				it.ImagePost = nil
 			} else {
-				err := fmt.Errorf(`unexpected type %T from directive, should be *newsfeed/graph/model.InputImagePost`, tmp)
+				err := fmt.Errorf(`unexpected type %T from directive, should be *newsfeed/internal/domain/model.InputImagePost`, tmp)
 				return it, graphql.ErrorOnPath(ctx, err)
 			}
 		case "videoPost":
@@ -3045,7 +3040,7 @@ func (ec *executionContext) unmarshalInputPostInput(ctx context.Context, obj int
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("videoPost"))
 			directive0 := func(ctx context.Context) (interface{}, error) {
-				return ec.unmarshalOInputVideoPost2ᚖnewsfeedᚋgraphᚋmodelᚐInputVideoPost(ctx, v)
+				return ec.unmarshalOInputVideoPost2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐInputVideoPost(ctx, v)
 			}
 			directive1 := func(ctx context.Context) (interface{}, error) {
 				if ec.directives.OneOf == nil {
@@ -3063,7 +3058,7 @@ func (ec *executionContext) unmarshalInputPostInput(ctx context.Context, obj int
 			} else if tmp == nil {
 				it.VideoPost = nil
 			} else {
-				err := fmt.Errorf(`unexpected type %T from directive, should be *newsfeed/graph/model.InputVideoPost`, tmp)
+				err := fmt.Errorf(`unexpected type %T from directive, should be *newsfeed/internal/domain/model.InputVideoPost`, tmp)
 				return it, graphql.ErrorOnPath(ctx, err)
 			}
 		}
@@ -3309,7 +3304,7 @@ func (ec *executionContext) _TextPost(ctx context.Context, sel ast.SelectionSet,
 
 var userImplementors = []string{"User"}
 
-func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *model.Post) graphql.Marshaler {
+func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *model.User) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, userImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -3318,42 +3313,16 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("User")
 		case "id":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._User_id(ctx, field, obj)
-				if res == graphql.Null {
-					atomic.AddUint32(&invalids, 1)
-				}
-				return res
+			out.Values[i] = ec._User_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				invalids++
 			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		case "name":
-			field := field
 
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._User_name(ctx, field, obj)
-				return res
-			}
+			out.Values[i] = ec._User_name(ctx, field, obj)
 
-			out.Concurrently(i, func() graphql.Marshaler {
-				return innerFunc(ctx)
-
-			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -3738,11 +3707,11 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) marshalNPost2newsfeedᚋgraphᚋmodelᚐPost(ctx context.Context, sel ast.SelectionSet, v model.Post) graphql.Marshaler {
+func (ec *executionContext) marshalNPost2newsfeedᚋinternalᚋdomainᚋmodelᚐPost(ctx context.Context, sel ast.SelectionSet, v model.Post) graphql.Marshaler {
 	return ec._Post(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNPost2ᚕᚖnewsfeedᚋgraphᚋmodelᚐPost(ctx context.Context, sel ast.SelectionSet, v []*model.Post) graphql.Marshaler {
+func (ec *executionContext) marshalNPost2ᚕᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐPost(ctx context.Context, sel ast.SelectionSet, v []*model.Post) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3766,7 +3735,7 @@ func (ec *executionContext) marshalNPost2ᚕᚖnewsfeedᚋgraphᚋmodelᚐPost(c
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPost2ᚖnewsfeedᚋgraphᚋmodelᚐPost(ctx, sel, v[i])
+			ret[i] = ec.marshalOPost2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐPost(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3780,7 +3749,7 @@ func (ec *executionContext) marshalNPost2ᚕᚖnewsfeedᚋgraphᚋmodelᚐPost(c
 	return ret
 }
 
-func (ec *executionContext) marshalNPost2ᚖnewsfeedᚋgraphᚋmodelᚐPost(ctx context.Context, sel ast.SelectionSet, v *model.Post) graphql.Marshaler {
+func (ec *executionContext) marshalNPost2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐPost(ctx context.Context, sel ast.SelectionSet, v *model.Post) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -3790,13 +3759,13 @@ func (ec *executionContext) marshalNPost2ᚖnewsfeedᚋgraphᚋmodelᚐPost(ctx 
 	return ec._Post(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNPostType2newsfeedᚋgraphᚋmodelᚐPostType(ctx context.Context, v interface{}) (model.PostType, error) {
+func (ec *executionContext) unmarshalNPostType2newsfeedᚋinternalᚋdomainᚋmodelᚐPostType(ctx context.Context, v interface{}) (model.PostType, error) {
 	var res model.PostType
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNPostType2newsfeedᚋgraphᚋmodelᚐPostType(ctx context.Context, sel ast.SelectionSet, v model.PostType) graphql.Marshaler {
+func (ec *executionContext) marshalNPostType2newsfeedᚋinternalᚋdomainᚋmodelᚐPostType(ctx context.Context, sel ast.SelectionSet, v model.PostType) graphql.Marshaler {
 	return v
 }
 
@@ -4068,7 +4037,7 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) marshalOAttachment2newsfeedᚋgraphᚋmodelᚐAttachment(ctx context.Context, sel ast.SelectionSet, v model.Attachment) graphql.Marshaler {
+func (ec *executionContext) marshalOAttachment2newsfeedᚋinternalᚋdomainᚋmodelᚐAttachment(ctx context.Context, sel ast.SelectionSet, v model.Attachment) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -4101,7 +4070,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) unmarshalOInputImagePost2ᚖnewsfeedᚋgraphᚋmodelᚐInputImagePost(ctx context.Context, v interface{}) (*model.InputImagePost, error) {
+func (ec *executionContext) unmarshalOInputImagePost2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐInputImagePost(ctx context.Context, v interface{}) (*model.InputImagePost, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -4109,7 +4078,7 @@ func (ec *executionContext) unmarshalOInputImagePost2ᚖnewsfeedᚋgraphᚋmodel
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOInputTextPost2ᚖnewsfeedᚋgraphᚋmodelᚐInputTextPost(ctx context.Context, v interface{}) (*model.InputTextPost, error) {
+func (ec *executionContext) unmarshalOInputTextPost2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐInputTextPost(ctx context.Context, v interface{}) (*model.InputTextPost, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -4117,7 +4086,7 @@ func (ec *executionContext) unmarshalOInputTextPost2ᚖnewsfeedᚋgraphᚋmodel�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOInputVideoPost2ᚖnewsfeedᚋgraphᚋmodelᚐInputVideoPost(ctx context.Context, v interface{}) (*model.InputVideoPost, error) {
+func (ec *executionContext) unmarshalOInputVideoPost2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐInputVideoPost(ctx context.Context, v interface{}) (*model.InputVideoPost, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -4141,14 +4110,14 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return res
 }
 
-func (ec *executionContext) marshalOPost2ᚖnewsfeedᚋgraphᚋmodelᚐPost(ctx context.Context, sel ast.SelectionSet, v *model.Post) graphql.Marshaler {
+func (ec *executionContext) marshalOPost2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐPost(ctx context.Context, sel ast.SelectionSet, v *model.Post) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Post(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOPostInput2ᚖnewsfeedᚋgraphᚋmodelᚐPostInput(ctx context.Context, v interface{}) (*model.PostInput, error) {
+func (ec *executionContext) unmarshalOPostInput2ᚖnewsfeedᚋinternalᚋdomainᚋmodelᚐPostInput(ctx context.Context, v interface{}) (*model.PostInput, error) {
 	if v == nil {
 		return nil, nil
 	}
