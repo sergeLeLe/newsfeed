@@ -73,10 +73,10 @@ func (r *Repo) AddPost(ctx context.Context, typePost model.PostType, authorId st
 	}
 
 	post := model.Post{
-		Order: &order,
+		Order:    &order,
 		AuthorID: authorId,
-		Type: typePost,
-		Attach: attachment,
+		Type:     typePost,
+		Attach:   attachment,
 	}
 
 	_, err = r.collection.InsertOne(ctx, post)

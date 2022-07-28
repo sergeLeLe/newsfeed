@@ -13,7 +13,13 @@ import (
 	"newsfeed/pkg/graph/generated"
 )
 
-type Resolver struct{
+const (
+	textPost  = "textPost"
+	imagePost = "imagePost"
+	videoPost = "videoPost"
+)
+
+type Resolver struct {
 	repo *repository.Repo
 }
 
@@ -27,8 +33,8 @@ func NewRootResolvers(repo *repository.Repo) generated.Config {
 	c.Directives.OneOf = func(ctx context.Context, obj interface{}, next graphql.Resolver) (res interface{}, err error) {
 		input := obj.(map[string]interface{})
 
-		if len(input) > 1{
-			return nil, errors.New("One only input")
+		if len(input) > 1 {
+			return nil, errors.New("Only one input")
 		}
 
 		return next(ctx)
@@ -45,11 +51,11 @@ func NewRootResolvers(repo *repository.Repo) generated.Config {
 			break
 		}
 
-		if typePost == model.PostTypeText.String() && attachType != "textPost" {
+		if typePost == model.PostTypeText.String() && attachType != textPost {
 			return nil, errors.New("Invalid args")
-		} else if typePost == model.PostTypeImage.String() && attachType != "imagePost" {
+		} else if typePost == model.PostTypeImage.String() && attachType != imagePost {
 			return nil, errors.New("Invalid args")
-		} else if typePost == model.PostTypeVideo.String() && attachType != "videoPost" {
+		} else if typePost == model.PostTypeVideo.String() && attachType != videoPost {
 			return nil, errors.New("Invalid args")
 		}
 
