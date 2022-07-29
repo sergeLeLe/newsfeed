@@ -2,11 +2,8 @@ package config
 
 import (
 	"errors"
-	"github.com/joho/godotenv"
-	"github.com/kelseyhightower/envconfig"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
-	"log"
 	"os"
 	"time"
 )
@@ -61,24 +58,10 @@ func readParamsFromConfigFile(pathToFile string, config *Config) error {
 	return nil
 }
 
-func readParamsFromEnv(config *Config) error {
-	if err := godotenv.Load(); err != nil {
-		log.Print("failed env var from .env file")
-	}
-
-	if err := envconfig.Process("", config); err != nil {
-		return ErrParseFile
-	}
-	return nil
-}
-
 func New(pathToConfigFile string) (*Config, error) {
 	var config Config
 
 	if err := readParamsFromConfigFile(pathToConfigFile, &config); err != nil {
-		return nil, err
-	}
-	if err := readParamsFromEnv(&config); err != nil {
 		return nil, err
 	}
 
