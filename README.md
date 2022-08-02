@@ -8,9 +8,9 @@
 Стек (GoLang):
 
 * GoLang
-* PostgresSQL | MongoDB
-*  | go.mongodb.org/mongo-driver/mongo
-* go-chi.io | gorilla/mux | gin-gonic
+* MongoDB
+* go.mongodb.org/mongo-driver/mongo
+* go-chi.io
 * https://github.com/99designs/gqlgen
 
 
