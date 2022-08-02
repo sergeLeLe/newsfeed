@@ -1,0 +1,66 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type User {
+    id: ID!
+    name: String
+}
+
+type Query {
+    feed(limit: Int = 25, offset: Int = 0): [Post]!
+}
+
+union Attachment = TextPost | VideoPost | ImagePost
+
+type Post {
+    author_id: ID!
+    type: PostType!
+    order: Int
+    attach: Attachment
+}
+
+type TextPost {
+    text: String
+}
+
+type VideoPost {
+    location: String
+}
+
+type ImagePost {
+    location: String
+}
+
+enum PostType {
+    text,
+    image,
+    video
+}
+
+directive @oneOf on INPUT_OBJECT
+
+input PostInput @oneOf {
+    textPost: InputTextPost
+    imagePost: InputImagePost
+    videoPost: InputVideoPost
+}
+
+input InputTextPost {
+    text: String
+}
+
+input InputImagePost {
+    location: String
+}
+
+input InputVideoPost {
+    location: String
+}
+
+directive @validatePostType on ARGUMENT_DEFINITION
+
+type Mutation {
+    addPost(type: PostType! @validatePostType, author_id: ID!, attach: PostInput @validatePostType): Post!
+}
